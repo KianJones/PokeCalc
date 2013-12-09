@@ -52,7 +52,7 @@ def quit():
 order ={1:'HP', 2:'Attack', 3:'Defense', 4:'Special Attack', 
                 5:'Special Defense', 6:'Speed'}
 class Pokemon(object):
-    def __init__(self, name, level, stats = [], iv = []):
+    def __init__(self, name, level, statsL = [], iv = [], ev = [0,0,0,0,0,0]):
         stats = "HP, Attack, Defense, Speed, Special Attack, Special Defense"
         order ={1:'HP', 2:'Attack', 3:'Defense', 4:'Special Attack', 
                 5:'Special Defense', 6:'Speed'}
@@ -60,14 +60,21 @@ class Pokemon(object):
         self.level = level
         self.stats = {stat: None for stat in stats.split(', ')}
         self.iv = {stat: None for stat in stats.split(', ')}
+        self.ev = {stat: None for stat in stats.split(', ')}
+        self.evL = ev
         
-        if len(stats) > 0:
+        if len(statsL) > 0:
             for i in range(1,7):
-                    self.stats[order[i]] = stats[i-1]
+                self.stats[order[i]] = statsL[i-1]
         
         if len(iv) > 0:
             for i in range(1,7):
                 self.iv[order[i]] = iv[i-1]
+        
+        if len(ev) > 0:
+            for i in range(1,7):
+                self.ev[order[i]] = ev[i-1]
+                
                 
                 
 			
@@ -80,6 +87,21 @@ def hpstat_calc(hp, base, ev, level):
     num = ((int(hp) + (2*base) + ev/4.0 + 100) * int(level))
     result = (num/100.0) + 10
     return result
+    
+def iv_calc(stat, base, ev, level):
+    a = ((math.ceil(stat)-5)*100.0/level) - 2.0 * base - math.floor(ev/4.0)
+    #b = 
+    return a 
+    
+def hpiv_calc(hp, base, ev, level):
+    a = (hp-level-10)*100.0/level - 2.0 * base - math.floor(ev/4.0)
+    # print (hp-level-10)
+    # print 100.0/level
+    # print 2.0 * base
+    # print math.floor(ev/4.0)
+    #b = 
+    return a 
+    
 				
 def getStatsfromIV(poke):
     level = poke.level                
@@ -88,20 +110,38 @@ def getStatsfromIV(poke):
     base = [int(i) for i in base]
     #npos = int(raw_input("enter the boosted stat: "))
     #nneg = int(raw_input("enter the hindered stat: "))
-    print base
-    ev = [74,195,86,23,48,84]
+    #print base
+    ev = poke.evL
 
-    new_HP = hpstat_calc(poke.iv["HP"],base[0],ev[0],level)
+    new_HP  = hpstat_calc(poke.iv["HP"],base[0],ev[0],level)
     new_Atk = stat_calc(poke.iv["Attack"],base[1],ev[1],level)*1.1
     new_Def = stat_calc(poke.iv["Defense"],base[2],ev[2],level)
     new_Spe = stat_calc(poke.iv["Speed"],base[5],ev[3],level)
-    new_Spa = stat_calc(poke.iv["Special Attack"],base[3],ev[4],level)*0.9
-    new_Spd = stat_calc(poke.iv["Special Defense"],base[4],ev[5],level)
+    new_SpA = stat_calc(poke.iv["Special Attack"],base[3],ev[4],level)*0.9
+    new_SpD = stat_calc(poke.iv["Special Defense"],base[4],ev[5],level)
 
-    new_Stat = [new_HP,new_Atk,new_Def,new_Spe,new_Spa,new_Spd]
+    new_Stat = [new_HP,new_Atk,new_Def,new_Spe,new_SpA,new_SpD]
     new_Stat = [math.floor(i) for i in new_Stat]
     print new_Stat
-        
+    
+def getIVfromStats(poke):
+    level = poke.level
+    name = poke.name
+    base = dex.dex[int(nameList.name[name])]
+    base = [int(i) for i in base]
+    ev = poke.evL
+    #print base
+    
+    new_HP  = hpiv_calc(poke.stats["HP"],base[0],ev[0],level)
+    new_Atk = iv_calc(poke.stats["Attack"],base[1],ev[1],level)#*1.1
+    new_Def = iv_calc(poke.stats["Defense"],base[2],ev[2],level)
+    new_Spe = iv_calc(poke.stats["Speed"],base[5],ev[3],level)
+    new_SpA = iv_calc(poke.stats["Special Attack"],base[3],ev[4],level)#*0.9
+    new_SpD = iv_calc(poke.stats["Special Defense"],base[4],ev[5],level)
+    
+    new_IV = [new_HP,new_Atk,new_Def,new_Spe,new_SpA,new_SpD]
+    #new_IV = [math.floor(i) for i in new_IV]
+    print new_IV
 
 def getHP(mon):
     a = int(mon.iv["HP"])
@@ -128,12 +168,16 @@ def getHP(mon):
     
 
 
-Pikachu = Pokemon("pikachu", iv=[31,31,31,31,31,31], level = 50)
+Pikachu = Pokemon("absol", statsL =[135,159,75,90,81,75], level = 50, ev = [255,255,255,255,255,255])
+Absol = Pokemon("absol", iv=[20,20,20,20,20,20], level = 50, ev=[0,0,0,0,0,0])
+#iv=[31,31,31,31,31,31]
+#, ev = [74,195,86,23,48,84]
 #print Pikachu.status
-getHP(Pikachu)
-getStatsfromIV(Pikachu)
-Pikachu.red = 3
-print Pikachu.red
+#getHP(Pikachu)
+getStatsfromIV(Absol)
+print Pikachu.stats
+getIVfromStats(Pikachu)
+
 
 
 
