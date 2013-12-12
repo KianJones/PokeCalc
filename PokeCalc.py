@@ -51,6 +51,7 @@ def quit():
 			
 order ={1:'HP', 2:'Attack', 3:'Defense', 4:'Special Attack', 
                 5:'Special Defense', 6:'Speed'}
+stats = "HP, Attack, Defense, Speed, Special Attack, Special Defense"
 class Pokemon(object):
     def __init__(self, name, level, statsL = [], iv = [], ev = [0,0,0,0,0,0]):
         stats = "HP, Attack, Defense, Speed, Special Attack, Special Defense"
@@ -88,21 +89,31 @@ def hpstat_calc(hp, base, ev, level):
     result = (num/100.0) + 10
     return result
     
+# def iv_calc(stat, base, ev, level):
+    # #a = ((math.ceil(stat)-5)*100.0/level) - 2.0 * base - math.floor(ev/4.0)
+    # #b = 
+    # a = (((math.ceil(stat/1) - 5) * 100.0) / level) - 2*base - ev/4
+    # return (a )
+    
 def iv_calc(stat, base, ev, level):
-    #a = ((math.ceil(stat)-5)*100.0/level) - 2.0 * base - math.floor(ev/4.0)
-    #b = 
-    a = (((math.ceil(stat/1) - 5) * 100.0) / level) - 2*base - ev/4
-    return (a )
+    a = (100*(stat-5))//level
+    b = -(2*base)-(ev//4)
+    return a+b
+    
     
 def hpiv_calc(hp, base, ev, level):
     #a = ((hp-level-10)*100.0 / level) - 2.0 * base - math.floor(ev/4.0)
-    a = ((hp - 10) * 100.0) / level - 2.0*base - ev/4.0 - 100
+    #a = ((hp - 10) * 100.0) / level - 2.0*base - ev/4.0 - 100
     # print (hp-level-10)
     # print 100.0/level
     # print 2.0 * base
     # print math.floor(ev/4.0)
     # b = 
-    return math.ceil(a)
+    
+    a = (100*(hp-10))//level
+    b = -100 -(ev//4) -(2*base)
+    
+    return math.ceil(a+b)
     
 				
 def getStatsfromIV(poke):
@@ -124,22 +135,32 @@ def getStatsfromIV(poke):
 
     new_Stat = [new_HP,new_Atk,new_Def,new_Spe,new_SpA,new_SpD]
     new_Stat = [math.floor(i) for i in new_Stat]
-    print new_Stat
+    statlist = stats.split(',')
+    new_Stats = dict(zip(statlist,new_Stat))
+    print new_Stats
+    return new_Stats
     
 def getIVfromStats(poke):
-    level = poke.level
+    level = 100
     name = poke.name
     base = dex.dex[int(nameList.name[name])]
     base = [int(i) for i in base]
     ev = poke.evL
-    print base
+    maxStat = getIVfromStats(poke)
+    #print base
     
-    new_HP  = hpiv_calc(poke.stats["HP"],base[0],ev[0],level)
-    new_Atk = iv_calc(poke.stats["Attack"],base[1],ev[1],level)#*1.1
-    new_Def = iv_calc(poke.stats["Defense"],base[2],ev[2],level)
-    new_Spe = iv_calc(poke.stats["Speed"],base[5],ev[3],level)
-    new_SpA = iv_calc(poke.stats["Special Attack"],base[3],ev[4],level)#*0.9
-    new_SpD = iv_calc(poke.stats["Special Defense"],base[4],ev[5],level)
+    # new_HP  = hpiv_calc(poke.stats["HP"],base[0],ev[0],level)
+    # new_Atk = iv_calc(poke.stats["Attack"],base[1],ev[1],level)#*1.1
+    # new_Def = iv_calc(poke.stats["Defense"],base[2],ev[2],level)
+    # new_Spe = iv_calc(poke.stats["Speed"],base[5],ev[3],level)
+    # new_SpA = iv_calc(poke.stats["Special Attack"],base[3],ev[4],level)#*0.9
+    # new_SpD = iv_calc(poke.stats["Special Defense"],base[4],ev[5],level)
+    new_HP  = hpiv_calc(maxStat["HP"],base[0],ev[0],level)
+    new_Atk = iv_calc(maxStat["Attack"],base[1],ev[1],level)#*1.1
+    new_Def = iv_calc(maxStat["Defense"],base[2],ev[2],level)
+    new_Spe = iv_calc(maxStat["Speed"],base[5],ev[3],level)
+    new_SpA = iv_calc(maxStat["Special Attack"],base[3],ev[4],level)#*0.9
+    new_SpD = iv_calc(maxStat["Special Defense"],base[4],ev[5],level)
     
     new_IV = [new_HP,new_Atk,new_Def,new_SpA,new_SpD,new_Spe]
     #new_IV = [math.floor(i) for i in new_IV]
