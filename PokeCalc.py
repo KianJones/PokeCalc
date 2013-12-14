@@ -134,10 +134,12 @@ def getHiddenPower(mon):
     e = int(mon.iv["Special Attack"])
     f = int(mon.iv["Special Defense"])
 
+    # takes the least significant bit of each stat
+    # same as if odd then 1; if even then 0
     HPtype = math.floor((((a%2) + (2*(b%2)) + (4*(c%2)) 
                         + (8*(d%2)) + (16*(e%2)) + (32*(f%2)))*15.0)/63.0)
   
-	
+	# finds if the number has a remainder of 2 or 3 when divided by 4
     HPpower =  (((((a>>1) & 1) + 2*((b>>1) & 1)
                         + 4*((c>>1) & 1) + 8*((d>>1) & 1)
                         + 16*((e>>1) & 1) + 32*((f>>1) & 1))*40)
@@ -162,7 +164,8 @@ ghost = Pokemon("haunter", level=58, nature="brave",
 #getStatsfromIV(Absol)
 #print Pikachu.stats
 #getIVfromStats(ghost)
-getStatsfromIV(ghost)
+ghost.stats = getStatsfromIV(ghost)
+print ghost.stats
 
 
 
