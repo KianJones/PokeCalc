@@ -2,10 +2,53 @@
 
 import math
 from dex import dex, nameList, nature
+from sys import argv
+#script, inputMode = argv
 
 def quit():
     print 'error'; exit(0)
 
+# class Pokemon(object):
+	
+    # def __init__(self, name, stat={}, iv={} ):
+	# # order contains the stats in the numbered order i want them displayed
+	# # with a for loop, I do not need to worry about the order of the order dict
+	# # order[i] will return the value at i, which will be a stat
+	# # then that stat will be used as the key for the status dict 
+		
+        # self.name = name
+        # self.iv = {}
+        # self.stat = {}
+        # stats = "HP, Attack, Defense, Speed, Special Attack, Special Defense"
+        # self.status = {stat: None for stat in stats.split(', ')}
+        # order ={1:'HP', 2:'Attack', 3:'Defense', 4:'Special Attack', 
+                # 5:'Special Defense', 6:'Speed'}
+				
+        # if (inputMode.upper() == "IV" or inputMode.upper() == "STAT") and not (self.iv):		
+            # for i in range(1,7):
+                # self.status[order[i]] = raw_input("Enter the %s %s: " % 
+                                                    # (order[i], inputMode))
+                    
+                # try:
+                    # int(self.status[order[i]])
+                    # if int(self.status[order[i]]) > 999:
+                        # quit()
+                    # else:
+                        # int(self.status[order[i]])
+						
+                # except ValueError:
+                    # quit()
+            
+					
+        # else:
+            # print "That is not a proper input mode"
+            # quit()
+            
+        # if inputMode.upper() == "IV":
+            # self.iv = self.status
+        # else:
+            # self.stat = self.status
+			
 order ={1:'HP', 2:'Attack', 3:'Defense', 4:'Special Attack', 
                 5:'Special Defense', 6:'Speed'}
 stats = "HP, Attack, Defense, Speed, Special Attack, Special Defense"
@@ -47,14 +90,30 @@ def hpstat_calc(hp, base, ev, level):
     result = (num/100.0) + 10
     return result
     
+# def iv_calc(stat, base, ev, level):
+    # #a = ((math.ceil(stat)-5)*100.0/level) - 2.0 * base - math.floor(ev/4.0)
+    # #b = 
+    # a = (((math.ceil(stat/1) - 5) * 100.0) / level) - 2*base - ev/4
+    # return (a )
+    
 def iv_calc(stat, base, ev, level):
     a = (100*(stat-5))/level
     b = -(2*base)-(ev/4)
     return a+b+1
     
+    
 def hpiv_calc(hp, base, ev, level):
+    #a = ((hp-level-10)*100.0 / level) - 2.0 * base - math.floor(ev/4.0)
+    #a = ((hp - 10) * 100.0) / level - 2.0*base - ev/4.0 - 100
+    # print (hp-level-10)
+    # print 100.0/level
+    # print 2.0 * base
+    # print math.floor(ev/4.0)
+    # b = 
+    
     a = (100*(hp-10))/level
     b = -100 -(ev/4) -(2*base)
+    
     return a+b+1
     
 				
@@ -63,6 +122,9 @@ def getStatsfromIV(poke):
     name = poke.name
     base = dex.dex[int(nameList.name[name])]
     base = [int(i) for i in base]
+    #npos = int(raw_input("enter the boosted stat: "))
+    #nneg = int(raw_input("enter the hindered stat: "))
+    #print base
     ev = poke.evL
     nat = nature.natures[poke.nature]
     print nat
@@ -91,6 +153,8 @@ def getIVfromStats(poke):
     base = dex.dex[int(nameList.name[name])]
     base = [int(i) for i in base]
     ev = poke.evL
+    #maxStat = getIVfromStats(poke)
+    #print base
     
     new_HP  = hpiv_calc(poke.stats["HP"],base[0],ev[0],level)
     new_Atk = iv_calc(poke.stats["Attack"],base[1],ev[1],level)
@@ -98,11 +162,15 @@ def getIVfromStats(poke):
     new_Spe = iv_calc(poke.stats["Speed"],base[5],ev[3],level)
     new_SpA = iv_calc(poke.stats["Special Attack"],base[3],ev[4],level)
     new_SpD = iv_calc(poke.stats["Special Defense"],base[4],ev[5],level)
-   
+    # new_HP  = hpiv_calc(maxStat["HP"],base[0],ev[0],level)
+    # new_Atk = iv_calc(maxStat["Attack"],base[1],ev[1],level)#*1.1
+    # new_Def = iv_calc(maxStat["Defense"],base[2],ev[2],level)
+    # new_Spe = iv_calc(maxStat["Speed"],base[5],ev[3],level)
+    # new_SpA = iv_calc(maxStat["Special Attack"],base[3],ev[4],level)#*0.9
+    # new_SpD = iv_calc(maxStat["Special Defense"],base[4],ev[5],level)
+    
     new_IV = [new_HP,new_Atk,new_Def,new_SpA,new_SpD,new_Spe]
-    status = "HP, Attack, Defense, Special Attack, Special Defense, Speed"
-    statlist = status.split(',')
-    new_IV = dict(zip(statlist,new_Stat))
+    #new_IV = [math.floor(i) for i in new_IV]
     print new_IV
 
 def getHP(mon):
@@ -125,17 +193,19 @@ def getHP(mon):
     
     mon.hpType = HPtype
     mon.hpPower = HPpower
-    print "Type: %d Power: %d" % (HPtype, HPpower)
     print HPtype
     print HPpower
     
 
-
+#if __name__ is "__main__":
 #Pikachu = Pokemon("absol", statsL =[135,159,75,90,81,75], level = 50, ev = [255,255,255,255,255,255])
 #Absol = Pokemon("absol", iv=[20,20,20,20,20,20], level = 50, ev=[0,0,0,0,0,0])
 # For = Pokemon("forretress", level = 43, statsL=[121,94,114*(10.0/9),72*(10.0/11),57,41])
 # ghost = Pokemon("haunter", level = 58, nature="brave",statsL=[127,69*(10.0/11),57,148,84,116*(10.0/9)], ev=[0,0,0,0,0,0])
 ghost = Pokemon("haunter", level = 58, nature="brave",iv = [12,0,0,17,27,24], ev=[0,0,0,0,0,0])
+#iv=[31,31,31,31,31,31]
+#, ev = [74,195,86,23,48,84]
+#print Pikachu.status
 #getHP(Pikachu)
 #getStatsfromIV(Absol)
 #print Pikachu.stats
