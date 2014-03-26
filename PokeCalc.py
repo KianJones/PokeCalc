@@ -198,26 +198,9 @@ class Pokemon(object):
         print HPtype
         print HPpower
 
-#Pikachu = Pokemon("absol", statsL =[135,159,75,90,81,75], level = 50, ev = [255,255,255,255,255,255])
-#Absol = Pokemon("absol", iv=[20,20,20,20,20,20], level = 50, ev=[0,0,0,0,0,0])
-# For = Pokemon("forretress", level = 43, statsL=[121,94,114*(10.0/9),72*(10.0/11),57,41])
-# ghost = Pokemon("haunter", level = 58, nature="brave",statsL=[127,69*(10.0/11),57,148,84,116*(10.0/9)], ev=[0,0,0,0,0,0])
-# ghost = Pokemon("haunter", level=58, nature="brave",
-                # iv=[12, 0, 0, 17, 27, 24], ev=[0, 0, 0, 0, 0, 0])
-#getHP(Pikachu)
-#getStatsfromIV(Absol)
-#print Pikachu.stats
-#getIVfromStats(ghost)
-# ghost.stats = iv_to_stats(ghost)
-# print ghost.stats
-# g = "gible"
-# g1 = Pokemon(g, level=20, nature="careful", statsL=[58,39,28,18,29,23])
-# stats_to_iv(g1)
-
+        
+# example
 s = Pokemon("skarmory", level=21, nature="hasty", statsL=[64,43,61,28,40,44])
-#print s.statsL
-#stats_to_iv(s)
-#s.hpower_calc()
 s.stats_to_iv()
 s.hpower_calc()
 
