@@ -156,28 +156,29 @@ class Pokemon(object):
         statlist = status.split(', ')
         new_IV = dict(zip(statlist, new_IV))
         self.iv = new_IV
+        print self.iv['HP']
         # print new_IV
         return new_IV
 
 
     def hpower_calc(self):
         """ Finds the hidden power type and power using the IVs. """
-        # try:
-        a = int(self.iv["HP"])
-        b = int(self.iv["Attack"])
-        c = int(self.iv["Defense"])
-        d = int(self.iv["Speed"])
-        e = int(self.iv["Special Attack"])
-        f = int(self.iv["Special Defense"])
-        # except TypeError:
-            # # ivs have not yet been calculated
-            # self.iv = self.stats_to_iv()
-            # a = int(self.iv["HP"])
-            # b = int(self.iv["Attack"])
-            # c = int(self.iv["Defense"])
-            # d = int(self.iv["Speed"])
-            # e = int(self.iv["Special Attack"])
-            # f = int(self.iv["Special Defense"])
+        try:
+            a = int(self.iv["HP"])
+            b = int(self.iv["Attack"])
+            c = int(self.iv["Defense"])
+            d = int(self.iv["Speed"])
+            e = int(self.iv["Special Attack"])
+            f = int(self.iv["Special Defense"])
+        except TypeError:
+            # ivs have not yet been calculated
+            self.iv = self.stats_to_iv()
+            a = int(self.iv["HP"])
+            b = int(self.iv["Attack"])
+            c = int(self.iv["Defense"])
+            d = int(self.iv["Speed"])
+            e = int(self.iv["Special Attack"])
+            f = int(self.iv["Special Defense"])
             
         # takes the least significant bit of each stat
         # same as if odd then 1; if even then 0
@@ -216,7 +217,8 @@ class Pokemon(object):
 s = Pokemon("skarmory", level=21, nature="hasty", statsL=[64,43,61,28,40,44])
 #print s.statsL
 #stats_to_iv(s)
-s.hpower_calc()
+#s.hpower_calc()
 s.stats_to_iv()
+s.hpower_calc()
 
 print s.iv
