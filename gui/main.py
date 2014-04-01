@@ -4,6 +4,8 @@ from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.button import Button
 
 
 class Stats_Input(GridLayout):
@@ -82,13 +84,40 @@ class IVCalc(GridLayout):
         super(IVCalc, self).__init__(**kwargs)
         
         self.cols = 2
-        self.add_widget(Stats_Input())
-        self.add_widget(Results())
         
+        si = AnchorLayout(anchor_x='left', anchor_y='top')
+        res = AnchorLayout(anchor_x='right', anchor_y='bottom')
+        calc_but = AnchorLayout(anchor_x='center', anchor_y='bottom')
+        
+        si.add_widget(Stats_Input())
+        res.add_widget(Results())
+        calc_but.add_widget(Button(text='Calculate'))
+        
+        self.add_widget(si)
+        self.add_widget(res)
+        self.add_widget(calc_but)
+        
+        
+        
+class Calc_with_button(AnchorLayout):
+    def __init__(self, **kwargs):
+        super(Calc_with_button, self).__init__(**kwargs)
+        
+        si = AnchorLayout(anchor_x='left', anchor_y='top')
+        res = AnchorLayout(anchor_x='right', anchor_y='bottom')
+        calc_but = AnchorLayout(anchor_x='center', anchor_y='bottom')
+        
+        si.add_widget(Stats_Input())
+        res.add_widget(Results())
+        calc_but.add_widget(Button(text='Calculate'))
+        
+        self.add_widget(si)
+        self.add_widget(res)
+        self.add_widget(calc_but)
         
 class MyApp(App):
     def build(self):
-        return IVCalc()
+        return Calc_with_button()
         
 if __name__ == '__main__':
     MyApp().run()
